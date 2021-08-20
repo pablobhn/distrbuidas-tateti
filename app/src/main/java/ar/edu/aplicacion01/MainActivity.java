@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.btnBoton = findViewById(R.id.btnBoton);
+       // this.btnBoton = findViewById(R.id.btnBoton);
         this.btnSiguiente = findViewById(R.id.btnSiguiente);
         this.txtTexto = findViewById(R.id.txtTexto);
         this.lblTexto = findViewById(R.id.lblTexto);

@@ -2,14 +2,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical">
 
     <EditText
+        android:id="@+id/mensaje"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Hola a Todos"
+        android:text="Ta - Te - Ti"
         android:textAlignment="center"
-        android:id="@+id/mensaje"/>
+        android:textSize="30dp"
+         />
 
 </LinearLayout>
