@@ -3,10 +3,14 @@ package ar.edu.aplicacion01;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Vector;
 
 
 public class SegundaActivity extends AppCompatActivity implements View.OnClickListener {
@@ -50,7 +54,7 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
                 player1Turn = cruces;
                 roundCount = 0;
-                resultText.setText("");
+                resultText.setText("Turno de" + nombre);
 
                 for (int i = 0; i < 3; i++) {
                     for (int j = 0; j < 3; j++) {
@@ -63,17 +67,71 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
-
+    private void cpuPlay(String x){
+    int i = 0;
+    int j = 0;
+    int flag = 0;
+        while (i<3 && flag == 0)
+        {
+            while (j<3 && flag == 0)
+            {
+                if (  buttons[i][j].getText() == "")
+                {
+                    buttons[i][j].setText(x);
+                    flag = 1;
+                }
+                j++;
+            }
+            i++;
+            j=0;
+        }
+        player1Turn = !player1Turn;
+        resultText.setText("Turno de "+nombre);
+    }
     @Override
     public void onClick(View v) {
         if (!((Button) v).getText().toString().equals("")) {
             return;
         }
         if (player1Turn) {
+            if (cruces)
+            {
+                resultText.setText("Turno de la maquinaa");
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // yourMethod();
+                        cpuPlay("O");
+                    }
+                }, 5000);   //5 seconds
+
+            }
+            else
+            {
+                resultText.setText("Turno de "+nombre);
+            }
+
             ((Button) v).setText("X");
         } else {
+            if (cruces)
+            {
+                resultText.setText("Turno de "+nombre);
+            }
+            else
+            {
+                resultText.setText("Turno de la maquina");
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        // yourMethod();
+                        cpuPlay("X");
+                    }
+                }, 5000);   //5 seconds
+            }
+
             ((Button) v).setText("O");
         }
+
         roundCount++;
         if (checkForWin()) {
             if (player1Turn) {
@@ -126,7 +184,7 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
         resultText.setText( nombre + " ganó la partida" );
     }
     private void player2Wins() {
-        resultText.setText( "El jugador 2 ganó la partida" );
+        resultText.setText( "La maquina ganó la partida" );
     }
     private void draw() {
     }
