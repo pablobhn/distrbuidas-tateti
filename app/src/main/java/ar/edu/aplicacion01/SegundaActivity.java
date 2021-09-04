@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import java.util.Vector;
 
+import ar.edu.aplicacion01.db.DbHelper;
+
 
 public class SegundaActivity extends AppCompatActivity implements View.OnClickListener {
     String nombre;
@@ -182,8 +184,12 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
 
     private void player1Wins() {
         resultText.setText( nombre + " ganó la partida" );
+        DbHelper db = new DbHelper(SegundaActivity.this);
+                db.addPlayer(nombre);
     }
     private void player2Wins() {
+        DbHelper db = new DbHelper(SegundaActivity.this);
+        db.player2win();
         resultText.setText( "La maquina ganó la partida" );
     }
     private void draw() {
