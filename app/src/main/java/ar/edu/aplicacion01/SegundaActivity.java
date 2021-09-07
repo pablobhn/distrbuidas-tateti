@@ -185,7 +185,8 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
     private void player1Wins() {
         resultText.setText( nombre + " ganó la partida" );
         DbHelper db = new DbHelper(SegundaActivity.this);
-                db.addPlayer(nombre);
+        db.player1win(nombre);
+        db.player2lost();
     }
     private void player2Wins() {
         DbHelper db = new DbHelper(SegundaActivity.this);
@@ -193,5 +194,8 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
         resultText.setText( "La maquina ganó la partida" );
     }
     private void draw() {
+        DbHelper db = new DbHelper(SegundaActivity.this);
+        db.player1draw(nombre);
+        db.player2draw();
     }
 }

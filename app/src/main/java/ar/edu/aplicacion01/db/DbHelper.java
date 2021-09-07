@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import ar.edu.aplicacion01.entidades.Jugadores;
+
 public class DbHelper extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NOMBRE = "agenda.db";
@@ -31,7 +33,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 "cont_victorias INTEGER DEFAULT 0," +
                 "cont_derrotas INTEGER DEFAULT 0," +
                 "cont_empate INTEGER DEFAULT 0 ,"+
-                "nombre TEXT NOT NULL)"
+                "nombre TEXT NOT NULL," +
+                "UNIQUE(nombre)" +
+                ")"
                 ;
         Log.d(null,query);
         sqLiteDatabase.execSQL(query);
@@ -45,16 +49,21 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
-    public void addPlayer(String jugador){
+    public void player1win(String jugador){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("nombre",jugador);
-         db.insert(TABLE_JUGADORES,null,cv);
+        String query = "SELECT * FROM t_contactos";
+
+        Cursor cursor = null;
+        if (db != null){
+            db.insert(TABLE_JUGADORES,null,cv);
+        }
         cv.put("cont_empate",70);
         String[] a1=new String[1];
         a1[0] = jugador;
 
-       Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_victorias = cont_victorias + 1 WHERE id = 1",null);
+       Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_victorias = cont_victorias + 1 WHERE nombre = ?",a1);
         //db.update(TABLE_JUGADORES,cv,"nombre = ",a1);
         if (aux.getCount() > 0)
         {
@@ -70,11 +79,66 @@ public class DbHelper extends SQLiteOpenHelper {
        }
     */}
 
+
+    public void player1draw(String jugador){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("nombre",jugador);
+        String query = "SELECT * FROM t_contactos";
+
+        Cursor cursor = null;
+        if (db != null){
+            db.insert(TABLE_JUGADORES,null,cv);
+        }
+        cv.put("cont_empate",70);
+        String[] a1=new String[1];
+        a1[0] = jugador;
+
+        Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_empate = cont_empate + 1 WHERE nombre = ?",a1);
+        //db.update(TABLE_JUGADORES,cv,"nombre = ",a1);
+        if (aux.getCount() > 0)
+        {
+            long result = db.update (TABLE_JUGADORES,cv,"id = 1",null);
+        }
+    }
+    public void player2draw(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("nombre","CPU");
+        db.insert(TABLE_JUGADORES,null,cv);
+
+        String[] a1=new String[1];
+        a1[0] = "CPU";
+
+        Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_empate = cont_empate + 1 WHERE nombre = 'CPU'",null);
+        //db.update(TABLE_JUGADORES,cv,"nombre = ",a1);
+        if (aux.getCount() > 0)
+        {
+            long result = db.update (TABLE_JUGADORES,cv,"nombre = 'CPU'",null);
+        }
+    }
+    public void player2lost(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("nombre","CPU");
+        db.insert(TABLE_JUGADORES,null,cv);
+
+        String[] a1=new String[1];
+        a1[0] = "CPU";
+
+        Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_derrotas = cont_derrotas + 1 WHERE nombre = 'CPU'",null);
+        //db.update(TABLE_JUGADORES,cv,"nombre = ",a1);
+        if (aux.getCount() > 0)
+        {
+            long result = db.update (TABLE_JUGADORES,cv,"nombre = 'CPU'",null);
+        }
+    }
+
     public void player2win ( ){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("nombre","CPU");
-       // db.insert(TABLE_JUGADORES,null,cv);
+       db.insert(TABLE_JUGADORES,null,cv);
 
         String[] a1=new String[1];
         a1[0] = "CPU";
@@ -103,6 +167,29 @@ public class DbHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query,null);
         }
         return cursor;
+    }
+
+    public ArrayList <Jugadores> mostrarJugadores (){
+        DbHelper dbHelper = new DbHelper (context);
+        SQLiteDatabase db = this.getWritableDatabase();
+        ArrayList<Jugadores> listaJugadores = new ArrayList <>();
+        Jugadores jugador = null;
+        Cursor cursorJugadores = null;
+        cursorJugadores = db.rawQuery("SELECT * FROM t_contactos",null);
+                if (cursorJugadores.moveToFirst())
+                {
+                    do{
+                        jugador = new Jugadores();
+                        jugador.setId(cursorJugadores.getInt(0));
+                        jugador.setNombre(cursorJugadores.getString(1));
+                        jugador.setCont_victorias(cursorJugadores.getString(2));
+                        jugador.setCont_derrotas(cursorJugadores.getString(3));
+                        jugador.setCont_empates(cursorJugadores.getString(4));
+                        listaJugadores.add(jugador);
+                    }while(cursorJugadores.moveToNext());
+                }
+                cursorJugadores.close();
+                return listaJugadores;
     }
 
 
