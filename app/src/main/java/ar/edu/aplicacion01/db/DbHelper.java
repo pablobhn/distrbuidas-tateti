@@ -78,6 +78,27 @@ public class DbHelper extends SQLiteOpenHelper {
            Toast.makeText(context,"Agregado exitosamente",Toast.LENGTH_SHORT).show();
        }
     */}
+    public void player1lost (String jugador){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("nombre",jugador);
+        String query = "SELECT * FROM t_contactos";
+
+        Cursor cursor = null;
+        if (db != null){
+            db.insert(TABLE_JUGADORES,null,cv);
+        }
+        cv.put("cont_empate",70);
+        String[] a1=new String[1];
+        a1[0] = jugador;
+
+        Cursor aux = db.rawQuery("UPDATE t_contactos SET cont_derrotas = cont_derrotas + 1 WHERE nombre = ?",a1);
+        //db.update(TABLE_JUGADORES,cv,"nombre = ",a1);
+        if (aux.getCount() > 0)
+        {
+            long result = db.update (TABLE_JUGADORES,cv,"id = 1",null);
+        }
+    }
 
 
     public void player1draw(String jugador){
@@ -191,6 +212,8 @@ public class DbHelper extends SQLiteOpenHelper {
                 cursorJugadores.close();
                 return listaJugadores;
     }
+
+
 
 
 }

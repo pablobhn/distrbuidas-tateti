@@ -141,7 +141,7 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 player2Wins();
             }
-        } else if (roundCount == 9) {
+        } else if (roundCount > 8) {
             draw();
         } else {
             player1Turn = !player1Turn;
@@ -191,11 +191,13 @@ public class SegundaActivity extends AppCompatActivity implements View.OnClickLi
     private void player2Wins() {
         DbHelper db = new DbHelper(SegundaActivity.this);
         db.player2win();
+        db.player1lost(nombre);
         resultText.setText( "La maquina ganó la partida" );
     }
     private void draw() {
         DbHelper db = new DbHelper(SegundaActivity.this);
         db.player1draw(nombre);
         db.player2draw();
+        resultText.setText( "Empate" );
     }
 }
